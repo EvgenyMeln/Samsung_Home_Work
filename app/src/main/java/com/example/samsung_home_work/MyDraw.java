@@ -12,12 +12,15 @@ import android.view.View;
 
 public class MyDraw extends View {
 
-    int N = 50; // количество шариков
+    int N = 50;
+
     float[] x  = new float[N];
     float[] y  = new float[N];
     float[] vx = new float[N];
     float[] vy = new float[N];
+
     public MyDraw(Context context) {
+
         super(context);
         for (int i = 0; i < N; i++) {
             x[i] = (float) (Math.random() * 500);
@@ -29,18 +32,25 @@ public class MyDraw extends View {
 
     Paint paint = new Paint();
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        // отрисовываем все шарики
+    void drawBalls(Canvas canvas){
         for (int i = 0; i < N; i++) {
             canvas.drawCircle(x[i], y[i], 20, paint);
         }
-        // готовим массивы x и у для следущего кадра
+    }
+
+    void addValues(float [] a, float [] av){
         for (int i = 0; i < N; i++) {
-            x[i] += vx[i];
-            y[i] += vy[i];
+            a[i] += av[i];
         }
-        // Запрос на перерисовку экрана
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        drawBalls(canvas);
+
+        addValues(x, vx);
+        addValues(y, vy);
+
         invalidate();
     }
 }
