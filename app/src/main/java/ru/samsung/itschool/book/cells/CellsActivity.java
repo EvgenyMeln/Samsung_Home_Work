@@ -22,8 +22,8 @@ import task.Task;
 public class CellsActivity extends Activity implements OnClickListener,
         OnLongClickListener {
 
-     int WIDTH = 9;
-     int HEIGHT = 5;
+     int WIDTH = 10;
+     int HEIGHT = 10;
 
      Button[][] cells;
 
@@ -42,12 +42,12 @@ public class CellsActivity extends Activity implements OnClickListener,
         makeCells();
 
 
-        int num = 1;
         for (int i = 0; i < HEIGHT; i++)
-            for (int j = 0; j < WIDTH; j++) {
-                cells[i][j].setText(num + "");
-                num++;
-            }
+            for (int j = 0; j < WIDTH; j++)
+                if (Math.random() >= 0.5)
+                {
+                    cells[i][j].setBackgroundColor(Color.BLACK);
+                }
 
     }
 
@@ -66,22 +66,41 @@ public class CellsActivity extends Activity implements OnClickListener,
 
     @Override
     public void onClick(View v) {
+            Button tappedCell = (Button) v;
 
-        Button tappedCell = (Button) v;
+            int tappedX = getX(tappedCell);
+            int tappedY = getY(tappedCell);
+            int color1 = ((ColorDrawable)cells[tappedY][tappedX].getBackground()).getColor();
 
-        int tappedX = getX(tappedCell);
-        int tappedY = getY(tappedCell);
+            if (color1 == 0xFFFFFFFF){
+                cells[tappedY][tappedX].setBackgroundColor(Color.BLACK);
+            }
+            else{
+                cells[tappedY][tappedX].setBackgroundColor(Color.WHITE);
+            }
 
-        int color = ((ColorDrawable)cells[tappedY][tappedX].getBackground()).getColor();
+            for (int x = 0; x < WIDTH; x++)
+            {
+                int color = ((ColorDrawable)cells[tappedY][x].getBackground()).getColor();
+                if (color == 0xFFFFFFFF){
+                    cells[tappedY][x].setBackgroundColor(Color.BLACK);
+                }
+                else {
+                    cells[tappedY][x].setBackgroundColor(Color.WHITE);
+                }
+            }
+            for (int y = 0; y < WIDTH; y++)
+            {
+                int color = ((ColorDrawable)cells[y][tappedX].getBackground()).getColor();
+                if(color == 0xFFFFFFFF){
+                    cells[y][tappedX].setBackgroundColor(Color.BLACK);
+                }
+                else{
+                    cells[y][tappedX].setBackgroundColor(Color.WHITE);
+                }
+            }
 
-        if (color == 0xFFFF0000){
-            cells[tappedY][tappedX].setBackgroundColor(Color.WHITE);
         }
-        else{
-            cells[tappedY][tappedX].setBackgroundColor(Color.RED);
-        }
-
-    }
 
     int getX(View v) { return Integer.parseInt(((String) v.getTag()).split(",")[1]); }
 
